@@ -1,0 +1,233 @@
+<!-- Chosen Palette: Calm & Professional -->
+<!-- Application Structure Plan: The application retains its two-part SPA structure. The key addition is a simple JavaScript password protection layer that gates access to the entire body content. -->
+<!-- Visualization & Content Choices: 
+- **JavaScript Password Prompt**: Goal: Security/Privacy. Method: A script runs on page load, prompts for a password, and only reveals the page content if the password is correct. Justification: This is the simplest, free method to meet the user's request for a private site on GitHub Pages. It's a basic deterrent, not high security, which is appropriate for this context.
+- **Content Hiding**: The CSS for the main container is initially set to `display: none;`. The password script changes it to `display: block;` upon successful authentication.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنصة الضريبية المغربية الخاصة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        #main-container { display: none; } /* Hide content by default */
+        .main-nav-link { transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .main-nav-link.active { color: #4f46e5; border-color: #4f46e5; }
+        .tab-link { transition: all 0.3s; border-bottom: 2px solid transparent; }
+        .tab-link.active { color: #4f46e5; border-color: #4f46e5; background-color: #eef2ff; }
+        .main-content, .tab-content { display: none; }
+        .main-content.active, .tab-content.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 40px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .gemini-button { background: linear-gradient(45deg, #4f46e5, #7c3aed); color: white; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .timeline-item::before { content: ''; position: absolute; top: 12px; right: -21px; width: 12px; height: 12px; background-color: #3b82f6; border-radius: 9999px; border: 2px solid #f8fafc; }
+        #geminiResult pre { white-space: pre-wrap; word-wrap: break-word; font-family: 'Tajawal', sans-serif; font-size: 1rem; line-height: 1.7; }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <div id="main-container">
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center py-6">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900">المنصة الضريبية المغربية المتكاملة</h1>
+                    <p class="mt-3 text-lg text-slate-600">تحليلات دقيقة وأدوات تفاعلية لتقدير ضرائب 2025</p>
+                </div>
+                <nav class="flex justify-center border-b border-slate-200 -mb-px">
+                    <button data-main-tab="analysis" class="main-nav-link active font-bold py-3 px-6 text-slate-700">التحليل الضريبي</button>
+                    <button data-main-tab="tools" class="main-nav-link font-bold py-3 px-6 text-slate-700">الأدوات التفاعلية</button>
+                </nav>
+            </div>
+        </header>
+        
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <div id="analysis" class="main-content active">
+                <!-- Analysis Content Here -->
+                 <section class="mb-16">
+                    <h3 class="text-3xl font-bold text-slate-800 mb-8 text-center">البنية الأساسية للنظام الضريبي</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                         <div class="bg-white rounded-xl shadow p-6 text-center transition-all kpi-card"><h4 class="text-xl font-bold text-blue-600 mb-2">الضريبة على الشركات (IS)</h4><p class="text-slate-500">تُفرض على أرباح الشركات.</p></div>
+                         <div class="bg-white rounded-xl shadow p-6 text-center transition-all kpi-card"><h4 class="text-xl font-bold text-teal-600 mb-2">الضريبة على الدخل (IR)</h4><p class="text-slate-500">تطبق على دخول الأشخاص الطبيعيين.</p></div>
+                         <div class="bg-white rounded-xl shadow p-6 text-center transition-all kpi-card"><h4 class="text-xl font-bold text-amber-600 mb-2">ض.ق.م (TVA)</h4><p class="text-slate-500">ضريبة غير مباشرة على الاستهلاك.</p></div>
+                         <div class="bg-white rounded-xl shadow p-6 text-center transition-all kpi-card"><h4 class="text-xl font-bold text-indigo-600 mb-2">واجبات التسجيل</h4><p class="text-slate-500">تُفرض على العقود والمحررات الرسمية.</p></div>
+                    </div>
+                </section>
+                <section class="mb-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h4 class="text-xl font-bold text-center mb-4">مقارنة أسعار الضريبة على الشركات (%) 2024-2025</h4>
+                        <div class="h-80"><canvas id="isChart"></canvas></div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h4 class="text-xl font-bold text-center mb-4">توزيع أسعار الضريبة على القيمة المضافة</h4>
+                        <div class="h-80"><canvas id="tvaChart"></canvas></div>
+                    </div>
+                </section>
+                 <section class="mb-16">
+                     <h3 class="text-3xl font-bold text-slate-800 mb-8 text-center">خارطة طريق الإصلاح الضريبي 2023-2026</h3>
+                     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow p-8">
+                         <div class="relative border-r-2 border-slate-200 pr-8 space-y-12">
+                             <div class="relative timeline-item"><h4 class="text-xl font-bold text-blue-600">2023: نقطة الانطلاق</h4><p class="text-slate-600">إطلاق الإصلاح الهيكلي وبدء التخفيض التدريجي لأسعار IS.</p></div>
+                             <div class="relative timeline-item"><h4 class="text-xl font-bold text-blue-600">2024: تسريع الوتيرة</h4><p class="text-slate-600">المرحلة الثانية من إصلاح IS وتوسيع إعفاءات TVA.</p></div>
+                             <div class="relative timeline-item"><h4 class="text-xl font-bold text-blue-600">2025: تعميق الإصلاح</h4><p class="text-slate-600">المرحلة الثالثة من إصلاح IS وتطبيق شرائح IR الجديدة.</p></div>
+                             <div class="relative timeline-item"><h4 class="text-xl font-bold text-blue-600">2026: الهدف النهائي</h4><p class="text-slate-600">الوصول للأسعار المستهدفة للشركات ونظام TVA مبسط.</p></div>
+                         </div>
+                     </div>
+                </section>
+            </div>
+            <div id="tools" class="main-content">
+                 <!-- Tools Content Here -->
+                <nav class="bg-white rounded-t-lg shadow flex justify-center border-b border-slate-200 flex-wrap">
+                    <button data-tab="ir-is" class="tab-link active font-semibold py-3 px-6 text-slate-600 hover:bg-slate-50">الأجراء والشركات</button>
+                    <button data-tab="cpu" class="tab-link font-semibold py-3 px-6 text-slate-600 hover:bg-slate-50">المساهمة المهنية الموحدة</button>
+                    <button data-tab="auto-entrepreneur" class="tab-link font-semibold py-3 px-6 text-slate-600 hover:bg-slate-50">المقاول الذاتي</button>
+                    <button data-tab="tpi" class="tab-link font-semibold py-3 px-6 text-slate-600 hover:bg-slate-50">الأرباح العقارية</button>
+                    <button data-tab="glossary" class="tab-link font-semibold py-3 px-6 text-slate-600 hover:bg-slate-50">معجم ضريبي</button>
+                </nav>
+                <div class="bg-white rounded-b-lg shadow p-6 md:p-8">
+                    <div id="ir-is-content" class="tab-content active">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+                            <div class="border-b md:border-b-0 md:border-l border-slate-200 pb-10 md:pb-0 md:pl-8"><h4 class="text-2xl font-bold text-teal-700 mb-6">تقدير الضريبة على الدخل (IR) للأجراء</h4><div class="space-y-4"><div><label for="grossAnnualSalary" class="block text-sm font-medium text-slate-700 mb-1">الدخل السنوي الإجمالي</label><input type="number" id="grossAnnualSalary" placeholder="مثال: 240000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="dependents" class="block text-sm font-medium text-slate-700 mb-1">عدد الأشخاص المعالين</label><input type="number" id="dependents" placeholder="مثال: 2" min="0" max="6" class="w-full p-2 border border-slate-300 rounded-md"></div><button id="calculateIrBtn" class="w-full font-bold py-3 px-4 rounded-md gemini-button">حساب ضريبة الدخل</button></div></div>
+                            <div><h4 class="text-2xl font-bold text-blue-700 mb-6">تقدير الضريبة على الشركات (IS)</h4><div class="space-y-4"><div><label for="netProfit" class="block text-sm font-medium text-slate-700 mb-1">الربح الصافي الخاضع للضريبة</label><input type="number" id="netProfit" placeholder="مثال: 500000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="turnover" class="block text-sm font-medium text-slate-700 mb-1">رقم المعاملات السنوي</label><input type="number" id="turnover" placeholder="مثال: 2000000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="companyStatus" class="block text-sm font-medium text-slate-700 mb-1">وضع الشركة</label><select id="companyStatus" class="w-full p-2 border border-slate-300 rounded-md"><option value="عادية">شركة عادية</option><option value="صناعية حديثة (أقل من 5 سنوات)">شركة صناعية حديثة (أقل من 5 سنوات)</option><option value="منطقة تسريع صناعي (أقل من 5 سنوات)">منطقة تسريع صناعي (أقل من 5 سنوات)</option><option value="منطقة تسريع صناعي (أكثر من 5 سنوات)">منطقة تسريع صناعي (أكثر من 5 سنوات)</option></select></div><button id="calculateIsBtn" class="w-full font-bold py-3 px-4 rounded-md gemini-button">حساب ضريبة الشركات</button></div></div>
+                        </div>
+                    </div>
+                    <div id="cpu-content" class="tab-content"><h4 class="text-2xl font-bold text-purple-700 mb-6 text-center">تقدير المساهمة المهنية الموحدة (CPU)</h4><div class="space-y-4 max-w-lg mx-auto"><div><label for="cpuTurnover" class="block text-sm font-medium">رقم المعاملات السنوي (بالدرهم)</label><input type="number" id="cpuTurnover" placeholder="150000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="cpuProfession" class="block text-sm font-medium">المهنة / النشاط</label><input type="text" id="cpuProfession" placeholder="مطور ويب، محامي، تاجر..." class="w-full p-2 border border-slate-300 rounded-md"></div><button id="calculateCpuBtn" class="w-full font-bold py-3 px-4 rounded-md gemini-button">حساب المساهمة</button></div></div>
+                    <div id="auto-entrepreneur-content" class="tab-content"><h4 class="text-2xl font-bold text-amber-700 mb-6 text-center">تقدير ضريبة المقاول الذاتي</h4><div class="space-y-4 max-w-lg mx-auto"><div><label for="aeTurnover" class="block text-sm font-medium">رقم المعاملات السنوي (بالدرهم)</label><input type="number" id="aeTurnover" placeholder="180000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="aeActivity" class="block text-sm font-medium">نوع النشاط</label><select id="aeActivity" class="w-full p-2 border border-slate-300 rounded-md"><option value="خدماتي">نشاط خدماتي</option><option value="صناعي أو تجاري أو حرفي">نشاط صناعي، تجاري أو حرفي</option></select></div><button id="calculateAeBtn" class="w-full font-bold py-3 px-4 rounded-md gemini-button">حساب الضريبة</button></div></div>
+                    <div id="tpi-content" class="tab-content"><h4 class="text-2xl font-bold text-rose-700 mb-6 text-center">تقدير الضريبة على الأرباح العقارية (TPI)</h4><div class="max-w-lg mx-auto"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="purchasePrice" class="block text-sm font-medium">ثمن الشراء (درهم)</label><input type="number" id="purchasePrice" placeholder="500000" class="w-full p-2 border border-slate-300 rounded-md"></div><div><label for="salePrice" class="block text-sm font-medium">ثمن البيع (درهم)</label><input type="number" id="salePrice" placeholder="800000" class="w-full p-2 border border-slate-300 rounded-md"></div><div class="sm:col-span-2 flex items-center mt-2"><input id="isPrimaryResidence" type="checkbox" class="h-4 w-4 text-indigo-600 rounded"><label for="isPrimaryResidence" class="mr-2 block text-sm">هل هو مسكنك الرئيسي لأكثر من 5 سنوات؟</label></div></div><button id="calculateTpiBtn" class="w-full mt-6 font-bold py-3 px-4 rounded-md gemini-button">حساب الضريبة</button></div></div>
+                    <div id="glossary-content" class="tab-content"><h4 class="text-2xl font-bold text-slate-800 mb-6 text-center">المعجم الضريبي التفاعلي</h4><p class="text-center text-slate-600 mb-6">اطرح سؤالاً عن أي مصطلح ضريبي واحصل على شرح مبسط.</p><div class="flex gap-2 max-w-lg mx-auto"><input type="text" id="glossaryQuery" placeholder="اكتب سؤالك هنا..." class="w-full p-2 border border-slate-300 rounded-md"><button id="askGlossaryBtn" class="font-bold py-3 px-6 rounded-md gemini-button">اسأل</button></div></div>
+                </div>
+                <div id="resultContainer" class="mt-12 max-w-3xl mx-auto hidden"><h3 class="text-3xl font-bold text-slate-800 mb-6 text-center">التقرير التقديري المفصل</h3><div id="loader" class="loader hidden"></div><div id="geminiResult" class="bg-white p-6 rounded-lg shadow"><pre class="text-slate-500 text-center">الرجاء إدخال البيانات والضغط على زر الحساب للحصول على تقريرك.</pre></div></div>
+            </div>
+        </main>
+    </div>
+
+<script>
+    // --- Application Initialization Function ---
+    function initializeApp() {
+        const mainNavLinks = document.querySelectorAll('.main-nav-link');
+        const mainContents = document.querySelectorAll('.main-content');
+        mainNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNavLinks.forEach(item => item.classList.remove('active'));
+                mainContents.forEach(content => content.classList.remove('active'));
+                link.classList.add('active');
+                document.getElementById(link.dataset.mainTab).classList.add('active');
+            });
+        });
+
+        const tabs = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const resultContainer = document.getElementById('resultContainer');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(item => item.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+                resultContainer.classList.add('hidden');
+            });
+        });
+        
+        new Chart(document.getElementById('isChart').getContext('2d'), { type: 'bar', data: { labels: [['الشركات (<100م)'], ['القطاع الصناعي'], ['الشركات (>100م)'], 'مؤسسات الائتمان'], datasets: [{ label: '2024', data: [20, 17.5, 35, 40], backgroundColor: 'rgba(96, 165, 250, 0.7)' }, { label: '2025', data: [20, 18.75, 35, 40], backgroundColor: 'rgba(59, 130, 246, 0.8)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: false } }, scales: { y: { beginAtZero: true } } } });
+        new Chart(document.getElementById('tvaChart').getContext('2d'), { type: 'doughnut', data: { labels: ['عادي (20%)', 'مخفض (14%)', 'مخفض (10%)', 'مخفض (7%)'], datasets: [{ data: [70, 15, 10, 5], backgroundColor: ['#14b8a6', '#f59e0b', '#f97316', '#64748b'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: false }, legend: { position: 'bottom' } } } });
+        
+        const loader = document.getElementById('loader');
+        const geminiResultDiv = document.getElementById('geminiResult');
+        const systemPrompt = `You are a professional Moroccan tax expert. Your task is to provide detailed and very clear estimated tax calculations. Your calculations must strictly be based on the Moroccan General Tax Code of 2024 as amended by the Finance Law of 2025. You must respond ONLY with a well-formatted text block in Arabic. Use markdown for titles (e.g., using '**' for bolding) and lists to structure the answer clearly. At the end of each answer, you must clearly state that this is just an estimate and a tax expert should be consulted.`;
+
+        const callGeminiAPI = async (userQuery) => {
+            resultContainer.classList.remove('hidden');
+            loader.classList.remove('hidden');
+            geminiResultDiv.innerHTML = '';
+            
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ parts: [{ text: userQuery }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API call failed: ${response.status}`);
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) throw new Error('No content received from API.');
+                geminiResultDiv.innerHTML = `<pre>${text}</pre>`;
+            } catch (error) {
+                geminiResultDiv.innerHTML = `<pre class="text-red-600 text-center"><b>حدث خطأ:</b> ${error.message}. يرجى المحاولة مرة أخرى.</pre>`;
+            } finally {
+                loader.classList.add('hidden');
+            }
+        };
+
+        document.getElementById('calculateIrBtn').addEventListener('click', () => {
+            const salary = document.getElementById('grossAnnualSalary').value, dependents = document.getElementById('dependents').value;
+            if (!salary || isNaN(salary) || salary <= 0) { alert('الرجاء إدخال مبلغ دخل سنوي إجمالي صحيح.'); return; }
+            if (dependents === '' || isNaN(dependents) || dependents < 0) { alert('الرجاء إدخال عدد صحيح للأشخاص المعالين.'); return; }
+            const irBrackets2025 = "0-40000: 0%, 40001-50000: 10%, 50001-65000: 20%, 65001-80000: 30%, 80001-180000: 34%, >180000: 38%";
+            callGeminiAPI(`احسب الضريبة على الدخل (IR) لسنة 2025 لموظف أجير بمعلومات: دخل سنوي إجمالي ${salary} درهم، و ${dependents} شخص معال. استخدم شرائح 2025 التالية: ${irBrackets2025} وقم بتفصيل كل خطوة.`);
+        });
+        document.getElementById('calculateIsBtn').addEventListener('click', () => {
+            const profit = document.getElementById('netProfit').value, turnover = document.getElementById('turnover').value, status = document.getElementById('companyStatus').value;
+            if (!profit || isNaN(profit)) { alert('الرجاء إدخال الربح الصافي.'); return; }
+            if (!turnover || isNaN(turnover) || turnover < 0) { alert('الرجاء إدخال رقم معاملات صحيح.'); return; }
+            const isRates2025 = "عادية < 100م: 20%. عادية >= 100م: 35%. صناعية < 100م: 18.75%. منطقة تسريع < 5 سنوات: 0%. منطقة تسريع > 5 سنوات: 15%";
+            callGeminiAPI(`احسب ضريبة الشركات (IS) لسنة 2025 لشركة بمعلومات: ربح صافي ${profit} درهم، رقم معاملات ${turnover} درهم، ووضع الشركة هو "${status}". لا تنس حساب ومقارنة المساهمة الدنيا (0.25% من رقم المعاملات) وتحديد المبلغ الواجب أداؤه. استخدم أسعار 2025 التالية: ${isRates2025}`);
+        });
+        document.getElementById('calculateCpuBtn').addEventListener('click', () => {
+            const turnover = document.getElementById('cpuTurnover').value, profession = document.getElementById('cpuProfession').value;
+            if (!turnover || isNaN(turnover) || turnover <= 0) { alert('الرجاء إدخال رقم معاملات صحيح.'); return; }
+            if (!profession) { alert('الرجاء إدخال المهنة أو النشاط.'); return; }
+            callGeminiAPI(`احسب المساهمة المهنية الموحدة (CPU) لسنة 2025 لشخص مهنته '${profession}' ورقم معاملاته السنوي ${turnover} درهم. قم بتفصيل جزء الضريبة وجزء التغطية الصحية.`);
+        });
+        document.getElementById('calculateAeBtn').addEventListener('click', () => {
+            const turnover = document.getElementById('aeTurnover').value, activity = document.getElementById('aeActivity').value;
+            if (!turnover || isNaN(turnover) || turnover <= 0) { alert('الرجاء إدخال رقم معاملات صحيح.'); return; }
+            callGeminiAPI(`احسب ضريبة المقاول الذاتي لسنة 2025 لمقاول رقم معاملاته ${turnover} درهم ونشاطه ${activity}.`);
+        });
+        document.getElementById('calculateTpiBtn').addEventListener('click', () => {
+            const purchasePrice = document.getElementById('purchasePrice').value, salePrice = document.getElementById('salePrice').value, isPrimary = document.getElementById('isPrimaryResidence').checked;
+            if (!purchasePrice || !salePrice || isNaN(purchasePrice) || isNaN(salePrice)) { alert('الرجاء إدخال أثمنة البيع والشراء.'); return; }
+            callGeminiAPI(`احسب الضريبة على الأرباح العقارية (TPI) لعملية بيع بالمعلومات: ثمن الشراء ${purchasePrice} درهم، ثمن البيع ${salePrice} درهم، وهل هو سكن رئيسي لأكثر من 5 سنوات: ${isPrimary}.`);
+        });
+        document.getElementById('askGlossaryBtn').addEventListener('click', () => {
+            const query = document.getElementById('glossaryQuery').value;
+            if (!query) { alert('الرجاء كتابة سؤالك.'); return; }
+            callGeminiAPI(`عرف المصطلح الضريبي التالي بشكل مبسط وواضح: "${query}".`);
+        });
+    }
+
+    // --- Password Protection ---
+    (function() {
+        //  غير كلمة المرور هنا. يمكنك اختيار أي كلمة تريدها.
+        const correctPassword = "YSAH12"; 
+        
+        let attempts = 0;
+        while (attempts < 3) {
+            const password = prompt("الرجاء إدخال كلمة المرور للوصول إلى المنصة:", "");
+            if (password === correctPassword) {
+                document.getElementById('main-container').style.display = 'block';
+                initializeApp(); // Call the main app logic ONLY after successful authentication
+                return; 
+            } else if (password === null) {
+                document.body.innerHTML = '<h1 style="text-align:center; font-family: Tajawal, sans-serif; padding-top: 50px;">تم إلغاء الوصول.</h1>';
+                return;
+            }
+            attempts++;
+            if (attempts < 3) {
+                alert("كلمة المرور غير صحيحة. المحاولات المتبقية: " + (3 - attempts));
+            }
+        }
+        
+        document.body.innerHTML = '<h1 style="text-align:center; font-family: Tajawal, sans-serif; padding-top: 50px;">فشلت المصادقة. تم حظر الوصول.</h1>';
+    })();
+</script>
+</body>
+</html>
